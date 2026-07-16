@@ -1,23 +1,42 @@
-# OS / editor cruft
+node_modules/
+.env
+.env.local
 .DS_Store
-Thumbs.db
-*.swp
-*~
-.idea/
-.vscode/
+
+# User project work — never commit raw video, transcripts, or renders
+hangar/*/
+!hangar/.gitkeep
+!hangar/README.md
+
+# Stage outputs
+*.mp4
+*.mov
+*.wav
+*.mp3
+*.m4a
+*.webm
+!examples/**/*.mp4
+
+# Transcription artifacts
+*.transcript.json
+*.cues.json
+
+# Local model caches
+.models/
+.cache/
+*.bin
+*.pt
+*.gguf
+
+# User profile (created by `vp init`)
+.maxship/
 
 # Build artifacts
-node_modules/
 dist/
 build/
-.next/
-out/
+.tsbuildinfo
 
-# Defensive — these patterns must never appear in commits
-*.env
-*.env.local
-*secrets*
-*token*
-*credentials*
-*.pem
-*.key
+# IDE
+.vscode/
+.idea/
+*.swp

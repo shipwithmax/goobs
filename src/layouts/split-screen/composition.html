@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MaxShip — Split-Screen Layout</title>
+<style>
+  :root {
+    --brand: #E85D26;
+    --bg: #0a0a0a;
+    --fg: #f5f5f5;
+    --speaker-pct: 45;     /* speaker side width %; tune to taste */
+    --content-pct: 55;
+  }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: -apple-system, system-ui, sans-serif; }
+  .stage {
+    position: relative; width: 1920px; height: 1080px; overflow: hidden;
+    display: grid;
+    grid-template-columns: var(--speaker-pct) var(--content-pct);
+    grid-template-columns: calc(var(--speaker-pct) * 1%) calc(var(--content-pct) * 1%);
+  }
+  .speaker { position: relative; overflow: hidden; }
+  .speaker video { width: 100%; height: 100%; object-fit: cover; }
+  .content { padding: 80px; display: flex; flex-direction: column; justify-content: center; gap: 2rem; }
+  .panel-title { font-size: 2.5rem; font-weight: 600; color: var(--brand); }
+  .panel-body { font-size: 4rem; font-weight: 700; line-height: 1.15; }
+  .panel-stat { font-size: 8rem; font-weight: 800; color: var(--brand); }
+  .panel-caption { font-size: 1.5rem; opacity: 0.7; }
+  /* Slots that GSAP timelines will animate */
+  .slot { opacity: 0; transform: translateY(40px); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="speaker">
+    <video src="../source.mp4" muted></video>
+  </div>
+  <div class="content">
+    <div class="panel-title slot" id="title-1">[TITLE FROM brief.md]</div>
+    <div class="panel-body slot" id="body-1">[The big idea you're talking about right now]</div>
+    <div class="panel-stat slot" id="stat-1">[STAT]</div>
+    <div class="panel-caption slot" id="caption-1">[Source / context]</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script>
+  // HyperFrames convention: paused timelines on window.__timelines.
+  // The enrich stage injects timeline.to() calls here from cues.json.
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+  tl.to('#title-1',   { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 0.5);
+  tl.to('#body-1',    { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 1.2);
+  tl.to('#stat-1',    { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 2.0);
+  tl.to('#caption-1', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 2.6);
+  window.__timelines.main = tl;
+</script>
+</body>
+</html>

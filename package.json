@@ -1,0 +1,45 @@
+{
+  "name": "goobs",
+  "version": "0.1.0",
+  "description": "Open-source, agent-native video editing pipeline. Plan, transcribe, cut, animate, render, schedule — all from your terminal.",
+  "license": "MIT",
+  "author": "Max Palmer (https://github.com/shipwithmax)",
+  "homepage": "https://github.com/shipwithmax/goobs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shipwithmax/goobs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shipwithmax/goobs/issues"
+  },
+  "keywords": [
+    "video",
+    "editor",
+    "agent",
+    "claude-code",
+    "hyperframes",
+    "motion-graphics",
+    "transcription",
+    "social-media"
+  ],
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "vp": "./bin/vp"
+  },
+  "scripts": {
+    "start": "node bin/vp",
+    "init": "node bin/vp init",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.5",
+    "execa": "^9.5.1",
+    "kleur": "^4.1.5",
+    "prompts": "^2.4.2",
+    "fluent-ffmpeg": "^2.1.3"
+  }
+}

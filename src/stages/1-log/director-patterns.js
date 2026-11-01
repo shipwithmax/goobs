@@ -10,25 +10,30 @@
  * Goobs feel like *your* editor, not a generic one.
  *
  * Cue types:
- *   keep         — keep the surrounding 10s of footage with high priority
- *   remove       — drop the surrounding sentence/take from the assembly
- *   restart      — speaker is about to redo the take; drop everything before this
+ *   keep         — mark this moment as high priority (shown in cues.json)
+ *   remove       — drop the sentence before the cue, and the cue itself
+ *   restart      — the speaker is redoing the take: drop the sentence before
+ *                  the cue (or everything before it, in the first 30 seconds)
  *   viz          — emit an on-screen visualization (chart, animation, callout)
  *   lower-third  — emit a lower-third graphic with extracted name/title
  *   b-roll       — flag for B-roll insertion at this timestamp
- *   note         — speaker is talking to the editor; preserve as a comment
+ *   note         — speaker is talking to the editor; kept as a comment
+ *
+ * `direction: true` means the phrase is spoken TO the editor, so Assemble
+ * cuts those words out of the rough cut. Phrases without it are part of the
+ * story ("here's the key point") and stay in the audio.
  */
 
 export const PATTERNS = [
   // ── KEEP / EMPHASIZE ────────────────────────────────────────────
-  { pattern: /\beditor[,]?\s+keep this\b/i,                     type: 'keep',        priority: 'high' },
+  { pattern: /\beditor[,]?\s+keep this\b/i,                     type: 'keep',        priority: 'high', direction: true },
   { pattern: /\b(this is the|here'?s the) (key|main|big) (point|thing|moment)\b/i, type: 'keep', priority: 'high' },
   { pattern: /\bremember this\b/i,                              type: 'keep',        priority: 'medium' },
 
   // ── REMOVE / RESTART ────────────────────────────────────────────
-  { pattern: /\b(drop this|drop that|delete this|delete that)\b/i, type: 'remove' },
-  { pattern: /\b(scratch that|ignore that|forget what i said)\b/i, type: 'remove' },
-  { pattern: /\b(start over|let me redo|let me restart|take two)\b/i, type: 'restart' },
+  { pattern: /\b(drop this|drop that|delete this|delete that|cut this|cut that)\b/i, type: 'remove', direction: true },
+  { pattern: /\b(scratch that|ignore that|forget what i said)\b/i, type: 'remove', direction: true },
+  { pattern: /\b(start over|let me redo|let me restart|let'?s restart|let'?s start over|take two)\b/i, type: 'restart', direction: true },
 
   // ── VISUALIZATIONS (the magic) ──────────────────────────────────
   { pattern: /\bimagine (a|the|some|this)?\s*(bar |line |pie )?chart (showing|of|with)\s+(.+?)(?=[.,]|$)/i,
@@ -42,22 +47,25 @@ export const PATTERNS = [
 
   // ── LOWER THIRDS ────────────────────────────────────────────────
   { pattern: /\blower[ -]third[s]?[:\-]\s*([^,.\n]+?)(?:,\s*([^.\n]+))?(?=[.\n])/i,
-    type: 'lower-third' },
+    type: 'lower-third', direction: true },
   { pattern: /\bmy name is\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s+(?:and\s+)?I'?m\s+(.+?)(?=[.,]|$)/,
     type: 'lower-third' },
 
   // ── B-ROLL & ANGLE CHANGES ──────────────────────────────────────
   { pattern: /\b(b-?roll|cutaway|insert)\s*(of|to|here)?\s*(.+?)(?=[.,]|$)/i,
     type: 'b-roll' },
-  { pattern: /\bchange (?:the )?angle\b/i,                      type: 'note', kind: 'angle-change' },
+  { pattern: /\bchange (?:the )?angle\b/i,                      type: 'note', kind: 'angle-change', direction: true },
 
   // ── EDITOR ASIDES (notes-to-self / notes-to-editor) ─────────────
-  { pattern: /\beditor[,]?\s+(.+?)(?=[.\n])/i,                  type: 'note' },
+  { pattern: /\beditor[,]?\s+(.+?)(?=[.\n]|$)/i,                type: 'note', direction: true },
 ];
 
 export function extractCues(transcript) {
   const cues = [];
-  const fullText = transcript.text || (transcript.words || []).map((w) => w.word).join(' ');
+  // Match against the words joined by spaces so character offsets map
+  // cleanly back to word timestamps. Fall back to plain text.
+  const words = transcript.words || [];
+  const fullText = words.length ? words.map((w) => w.word).join(' ') : (transcript.text || '');
   if (!fullText) return cues;
 
   for (const def of PATTERNS) {
@@ -73,6 +81,7 @@ export function extractCues(transcript) {
         priority: def.priority,
         vizKind: def.vizKind,
         kind: def.kind,
+        direction: Boolean(def.direction),
         match: m[0],
         groups: m.slice(1).filter(Boolean),
         text: m.slice(1).filter(Boolean).join(' — ') || m[0],

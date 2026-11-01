@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -6,6 +6,9 @@ import { homedir } from 'node:os';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, '..');
+
+// Load .env from the repo root, wherever `vp` is run from.
+dotenv.config({ path: join(repoRoot, '.env'), quiet: true });
 
 function expandHome(p) {
   if (!p) return p;
@@ -20,7 +23,8 @@ export async function loadConfig() {
   // Sensible defaults if .env doesn't exist yet (e.g., user hasn't run `vp init`)
   const defaults = {
     PROJECTS_ROOT: './hangar',
-    TRANSCRIBER: 'parakeet-local',
+    TRANSCRIBER: 'whisper-cpp',
+    WHISPER_MODEL: 'small.en',
     DIRECTOR_LLM: 'local',
     SCHEDULE_AUTO_PUBLISH: 'false',
     LOG_LEVEL: 'info',
@@ -34,6 +38,7 @@ export async function loadConfig() {
     projectsRoot,
     hasEnv,
     transcriber: env.TRANSCRIBER,
+    whisperModel: env.WHISPER_MODEL,
     directorLlm: env.DIRECTOR_LLM,
     autoPublish: env.SCHEDULE_AUTO_PUBLISH === 'true',
     logLevel: env.LOG_LEVEL,

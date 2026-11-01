@@ -6,6 +6,9 @@
  * cleanup in stages 3 and 4.
  */
 
+// Planned adapter: not implemented yet, so Goobs skips it (see README roadmap).
+export const implemented = false;
+
 export async function isAvailable(cfg) {
   return Boolean(cfg.keys.elevenlabs);
 }

@@ -64,7 +64,7 @@ What charts, lower-thirds, b-roll, or text should appear?
 - [ ]
 
 ## Director cues to drop while filming
-Speak these naturally on camera — MaxShip will pick them up automatically:
+Speak these naturally on camera. Goobs picks them up in \`vp log\`:
 - *"editor, keep this"* → marks the surrounding 10s as high-priority
 - *"cut this"* / *"start over"* → marks for removal
 - *"imagine a chart showing X"* → emits a viz cue at that timestamp

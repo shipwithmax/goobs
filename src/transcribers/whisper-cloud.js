@@ -5,6 +5,9 @@
  * Set OPENAI_API_KEY in .env.
  */
 
+// Planned adapter: not implemented yet, so Goobs skips it (see README roadmap).
+export const implemented = false;
+
 export async function isAvailable(cfg) {
   return Boolean(cfg.keys.openai);
 }

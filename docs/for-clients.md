@@ -14,9 +14,9 @@ Each stage is a real file you can watch or read. You don't need to know what "ro
 | Stage | What you'll see | What to look for |
 |---|---|---|
 | `2-assemble/rough.mp4` | A rough cut of you talking | Did they keep the right parts? Anything missing? |
-| `3-enrich/enriched.mp4` | Same thing + graphics & charts | Are the visuals on-brand? Any factual fixes? |
-| `4-polish/fine.mp4` | Cleaned up — better audio, smoother | Sign-off the content here |
-| `5-render/masters/` | Final files for each platform | Pick which platforms you want to publish on |
+| `3-enrich/enriched.mp4` (optional) | Same thing + graphics & callouts | Are the visuals on-brand? Any factual fixes? |
+| `4-polish/fine.mp4` | Same cut with even, normalised loudness | Sign off the content here |
+| `5-render/masters/` | Horizontal, vertical and square files, plus captions | Pick which platforms you want to publish on |
 
 ## Giving notes
 

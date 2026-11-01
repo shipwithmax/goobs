@@ -2,13 +2,13 @@
 
 Your video projects live here. One folder per video.
 
-After phase 2 ships, this README will auto-update with a table of every project and its current stage. For now: just inspect the folders directly.
+Everything in here except this README is gitignored: your footage, transcripts and renders never get committed.
 
 ## Folder convention
 
 ```
 hangar/Y26-04-25-my-first-video/
-├── source.mp4
+├── source.mp4        (or source.mov)
 ├── 0-plan/
 ├── 1-log/
 ├── 2-assemble/

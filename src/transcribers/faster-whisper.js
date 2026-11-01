@@ -9,6 +9,9 @@
  */
 import { execa } from 'execa';
 
+// Planned adapter: not implemented yet, so Goobs skips it (see README roadmap).
+export const implemented = false;
+
 export async function isAvailable() {
   try {
     await execa('python3', ['-c', 'import faster_whisper']);
